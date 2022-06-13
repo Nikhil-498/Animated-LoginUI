@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:login_page/next_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _keyboardVisible = false;
 
-  late Image _image;
   late StreamSubscription<bool> keyboardSubscription;
 
   @override
@@ -115,9 +115,6 @@ class _LoginPageState extends State<LoginPage> {
             _keyboardVisible ? windowsHeight : windowsHeight - 280;
         _headingTop = 80;
         break;
-
-      case 4:
-        _image = Image.asset('assets/login.jpg');
     }
     return Stack(
       children: [
@@ -174,9 +171,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Center(
                   child: GestureDetector(
                       onTap: () {
-                        setState(() {
-                          _pageState = 4;
-                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => const NextPage())));
                       },
                       child: Image.asset('assets/splash.jpg')),
                 ),
@@ -252,6 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                     const InputWithIcon(
                       icon: Icons.email,
                       hint: 'Enter a email..',
+                      obscuretxt: false,
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -259,6 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                     const InputWithIcon(
                       icon: Icons.vpn_key,
                       hint: 'Enter password',
+                      obscuretxt: true,
                     ),
                   ],
                 ),
@@ -317,6 +317,7 @@ class _LoginPageState extends State<LoginPage> {
                     const InputWithIcon(
                       icon: Icons.email,
                       hint: 'Enter a email',
+                      obscuretxt: false,
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -324,6 +325,7 @@ class _LoginPageState extends State<LoginPage> {
                     const InputWithIcon(
                       icon: Icons.vpn_key,
                       hint: 'Enter password',
+                      obscuretxt: true,
                     ),
                   ],
                 ),
@@ -417,7 +419,12 @@ class _OutlineBtnState extends State<OutlineBtn> {
 class InputWithIcon extends StatefulWidget {
   final IconData icon;
   final String hint;
-  const InputWithIcon({required this.icon, required this.hint, Key? key})
+  final bool obscuretxt;
+  const InputWithIcon(
+      {required this.obscuretxt,
+      required this.icon,
+      required this.hint,
+      Key? key})
       : super(key: key);
 
   @override
@@ -445,12 +452,14 @@ class _InputWithIconState extends State<InputWithIcon> {
           ),
           Expanded(
               child: TextField(
+            obscureText: widget.obscuretxt,
             decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 20.0,
-                ),
-                border: InputBorder.none,
-                hintText: widget.hint),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 20.0,
+              ),
+              border: InputBorder.none,
+              hintText: widget.hint,
+            ),
           )),
         ],
       ),
